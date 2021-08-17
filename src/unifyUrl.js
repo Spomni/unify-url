@@ -1,12 +1,16 @@
 const UnifyUrlError = require('./UnifyUrlError')
 
-const { log } = console
+const encodedUriComponentRegExp = new RegExp('^[a-z0-9\-_.!~*\'()]*$', 'i')
+
+function isEncodedUriComponent(value) {
+  return encodedUriComponentRegExp.test(value)
+}
 
 const {
   ARG_IS_NOT_STRING,
   UNEXPECTED_QUESTION_MARK,
   UNEXPECTED_SHARP,
-  NOT_ENCODED_PARAM,
+  UNENCODED_PARAM,
 } = UnifyUrlError.REASON_
 
 function unifyUrl(url) {
@@ -20,7 +24,7 @@ function unifyUrl(url) {
   if (url.match(/(\?)/g).length > 1) {
     throw new UnifyUrlError(UNEXPECTED_QUESTION_MARK, url)
   }
-  
+
   const [tillPath, search] = url.split('?')
   
   const sharps = search.match(/#/g)
@@ -29,17 +33,17 @@ function unifyUrl(url) {
     throw new UnifyUrlError(UNEXPECTED_SHARP, url)
   }
   
-  const [query, hash] = sharp ? search.split('#') : [search, '']
+  const [query, hash] = sharps ? search.split('#') : [search, '']
 
   const unifiedQuery = query.split('&')
     .map((param) => {
       const [key, value] = param.split('=')
       return [key, (value ? value : '')]
     })
-    .filter([key, value] => value !== '')
-    .map([key, value] => {
+    .filter(([key, value]) => value !== '')
+    .map(([key, value]) => {
       if (!isEncodedUriComponent(key) || !isEncodedUriComponent(value)) {
-        throw new UnifyUrlError(NOT_ENCODED_PARAM, url)
+        throw new UnifyUrlError(UNENCODED_PARAM, url)
       }
       return [key, value].join('=')
     })
@@ -54,9 +58,3 @@ function unifyUrl(url) {
 }
 
 module.exports = unifyUrl
-
-unifyUrl('http://some.domain/p/a/t/h#hash')
-
-unifyUrl('http://some.domain/p/a/t/h?key=value&a#ndKey=value#hash')
-
-unifyUrl('http://some.domain/p/a/t/h?key=value&andKey=value#hash')
