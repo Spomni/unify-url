@@ -125,5 +125,10 @@ describe('unifyUrl(url)', () => {
     })
   })
 
-  it('Should sort query params.')
+  it('Should sort query params.', () => {
+    const origin = 'http://some?a=a&k=k&c=c'
+    const target = 'http://some?a=a&c=c&k=k'
+    
+    assert.strictEqual(unifyUrl(origin), target)
+  })
 })
