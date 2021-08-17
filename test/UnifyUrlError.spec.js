@@ -1,11 +1,31 @@
+const { assert } = require('chai')
+const UnifyUrlError = require('../src/UnifyUrlError')
+const { REASON_ } = UnifyUrlError
+
 describe('UnifyUrlError', () => {
 
   describe('.REASON_', () => {
-    it('Should be an object with string properties')
-    it('Should has property ARG_IS_NOT_STRING')
-    it('Should has property UNEXPECTED_QUESTION_MARK')
-    it('Should has property UNEXPECTED_SHARP')
-    it('Should has property UNENCODED_PARAM')
+
+    it('Should be an object with string properties', () => {
+      assert.isObject(REASON_)
+      Object.values(REASON_).forEach((value) => assert.isString(value))
+    })
+
+    it('Should has property ARG_IS_NOT_STRING', () => {
+      assert(REASON_.hasOwnProperty('ARG_IS_NOT_STRING'))
+    })
+
+    it('Should has property UNEXPECTED_QUESTION_MARK', () => {
+      assert(REASON_.hasOwnProperty('UNEXPECTED_QUESTION_MARK'))
+    })
+
+    it('Should has property UNEXPECTED_SHARP', () => {
+      assert(REASON_.hasOwnProperty('UNEXPECTED_SHARP'))
+    })
+
+    it('Should has property UNENCODED_PARAM', () => {
+      assert(REASON_.hasOwnProperty('UNENCODED_PARAM'))    
+    })
   })
 
   describe('constructor()', () => {
