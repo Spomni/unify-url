@@ -56,6 +56,7 @@ describe('unifyUrl(url)', () => {
     })
   })
 
+  // TODO: Replace this check with error of incorrect count of the "=" caharacters in any param.
   it('Should throw an error if any query param is not uri encoded.', () => {
     const urlList = [
       'http://some.dom/pa/th?pa=\√&ra',
@@ -112,6 +113,17 @@ describe('unifyUrl(url)', () => {
     })
   })
  
-  it('Should remove empty query params.')
+  it('Should remove empty query params.', () => {
+
+    const urlList = [
+      ['http://some?p1=&p2&p3=v3', 'http://some?p3=v3'],
+      ['http://some?p1=&p2', 'http://some'],
+    ]
+    
+    urlList.forEach(([origin, target]) => {
+      assert.strictEqual(target, unifyUrl(origin))
+    })
+  })
+
   it('Should sort query params.')
 })
