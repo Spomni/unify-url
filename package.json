@@ -1,11 +1,29 @@
 {
-  "name": "unify-url",
-  "version": "0.0.0",
-  "description": "Remove empty query params and sortvothers.",
+  "name": "@spomni/unify-url",
+  "version": "1.0.0",
+  "description": "Remove empty query params and sort the rest of them.",
+  "keywords": [
+    "url",
+    "query",
+    "unify"
+  ],
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha test/*.spec.js",
+    "prepare": "npm test"
   },
   "author": "spomni",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "mocha": "^9.0.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Spomni/unify-url.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Spomni/unify-url/issues"
+  },
+  "homepage": "https://github.com/Spomni/unify-url#readme"
 }
