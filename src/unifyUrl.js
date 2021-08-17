@@ -1,11 +1,5 @@
 const UnifyUrlError = require('./UnifyUrlError')
 
-const encodedUriComponentRegExp = new RegExp('^[a-z0-9\-_.!~*\'()]*$', 'i')
-
-function isEncodedUriComponent(value) {
-  return encodedUriComponentRegExp.test(value)
-}
-
 const {
   ARG_IS_NOT_STRING,
   UNEXPECTED_QUESTION_MARK,
@@ -19,41 +13,33 @@ function unifyUrl(url) {
     throw new UnifyUrlError(ARG_IS_NOT_STRING)
   }
   
-  if (!url.match(/(\?)/g)) return url
-  
-  if (url.match(/(\?)/g).length > 1) {
+  const [tillPath, search, questMarkError] = url.split('?')
+
+  if (questMarkError !== undefined) {
     throw new UnifyUrlError(UNEXPECTED_QUESTION_MARK, url)
   }
 
-  const [tillPath, search] = url.split('?')
+  if (search === undefined) return url
   
-  const sharps = search.match(/#/g)
+  const [query, hash, sharpError] = search.split('#')
   
-  if (sharps && sharps.length > 1) {
+  if (sharpError !== undefined) {
     throw new UnifyUrlError(UNEXPECTED_SHARP, url)
   }
-  
-  const [query, hash] = sharps ? search.split('#') : [search, '']
 
   const unifiedQuery = query.split('&')
-    .map((param) => {
-      const chunks = param.split('=')
-      
-      if (chunks.length > 2) {
-        throw new UnifyUrlError(UNEXPECTED_EQUAL, url)
-      }
-      
-      if (chunks.length > 1) return chunks
-      return [...chunks, '']
+    .filter((param) => {
+      const [key, value, error] = param.split('=')
+      if (error !== undefined) throw new UnifyUrlError(UNEXPECTED_EQUAL, url)
+      if (!value || value === '') return false
+      return true
     })
-    .filter(([key, value]) => value !== '')
-    .map(([key, value]) => [key, value].join('='))
     .sort()
     .join('&')
 
   let result = tillPath
-  if (unifiedQuery !== '') result += '?' + unifiedQuery
-  if (hash !== '') result += '#' + hash
+  if (unifiedQuery) result += '?' + unifiedQuery
+  if (hash) result += '#' + hash
     
   return result
 }

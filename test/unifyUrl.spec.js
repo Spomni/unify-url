@@ -42,6 +42,7 @@ describe('unifyUrl(url)', () => {
   it('Should throw an error if the url contains more than one characters "#" in the search part of them.', () => {
     const urlList = [
       'http://some.dom/pa/th?pa#am#pam',
+      'http://some.dom/pa/th?pa#ampam#',
     ]
     
     urlList.forEach((url) => {
@@ -57,12 +58,17 @@ describe('unifyUrl(url)', () => {
   })
   
   it('Should throw an error if any param contains more than one character "="', () => {
-    const url = 'http://some?p=p=c&pf=y'
-    const message = UNEXPECTED_EQUAL + url
-    assert.throws(() => unifyUrl(url), UnifyUrlError, message)
+    const urlList = [
+      'http://some?p=p=c&pf=',
+      'http://some?p=pc=&pf=',
+    ]
+
+    urlList.forEach((url) => {
+      const message = UNEXPECTED_EQUAL + url
+      assert.throws(() => unifyUrl(url), UnifyUrlError, message)
+    })
   })
 
-  // TODO: Replace this check with error of incorrect count of the "=" caharacters in any param.
   it('Should not throw an error if any query param is not uri encoded.', () => {
     const urlList = [
       'http://some.dom/pa/th?pa=\√&ra',
@@ -81,6 +87,7 @@ describe('unifyUrl(url)', () => {
     
     const urlList = [
       beforeQuery,
+      beforeQuery + '?',
       beforeQuery + '#' + hash,
       beforeQuery + '?' + '#' + hash,
       beforeQuery + '?query' + '#' + hash,
