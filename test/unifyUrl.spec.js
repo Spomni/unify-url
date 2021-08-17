@@ -74,8 +74,43 @@ describe('unifyUrl(url)', () => {
     })
   })
 
-  it('Should not change the url part before query.')
-  it('Should not change an url hash.')
+  it('Should not change the url part before query.', () => {
+    const beforeQuery = 'ftp://some.dom/p/a/th'
+    const hash = 'hash'
+    
+    const urlList = [
+      beforeQuery,
+      beforeQuery + '#' + hash,
+      beforeQuery + '?' + '#' + hash,
+      beforeQuery + '?query' + '#' + hash,
+    ]
+
+    urlList.forEach((url) => {
+      let newBeforeQuery;
+      
+      newBeforeQuery = unifyUrl(url).split('?')[0]
+      newBeforeQuery = newBeforeQuery.split('#')[0]
+
+      assert.strictEqual(newBeforeQuery, beforeQuery)
+    })
+  })
+
+  it('Should not change an url hash.', () => {
+    const beforeQuery = 'ftp://some.dom/p/a/th'
+    const hash = 'hash'
+    
+    const urlList = [
+      beforeQuery + '#' + hash,
+      beforeQuery + '?' + '#' + hash,
+      beforeQuery + '?query' + '#' + hash,
+    ]
+    
+    urlList.forEach((url) => {
+      const newHash = unifyUrl(url).split('#')[1]
+    
+      assert.strictEqual(newHash, hash)
+    })
+  })
  
   it('Should remove empty query params.')
   it('Should sort query params.')
