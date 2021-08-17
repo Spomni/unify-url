@@ -10,7 +10,7 @@ const {
   ARG_IS_NOT_STRING,
   UNEXPECTED_QUESTION_MARK,
   UNEXPECTED_SHARP,
-  UNENCODED_PARAM,
+  UNEXPECTED_EQUAL,
 } = UnifyUrlError.REASON_
 
 function unifyUrl(url) {
@@ -37,16 +37,17 @@ function unifyUrl(url) {
 
   const unifiedQuery = query.split('&')
     .map((param) => {
-      const [key, value] = param.split('=')
-      return [key, (value ? value : '')]
+      const chunks = param.split('=')
+      
+      if (chunks.length > 2) {
+        throw new UnifyUrlError(UNEXPECTED_EQUAL, url)
+      }
+      
+      if (chunks.length > 1) return chunks
+      return [...chunks, '']
     })
     .filter(([key, value]) => value !== '')
-    .map(([key, value]) => {
-      if (!isEncodedUriComponent(key) || !isEncodedUriComponent(value)) {
-        throw new UnifyUrlError(UNENCODED_PARAM, url)
-      }
-      return [key, value].join('=')
-    })
+    .map(([key, value]) => [key, value].join('='))
     .sort()
     .join('&')
 

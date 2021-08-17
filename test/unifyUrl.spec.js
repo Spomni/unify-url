@@ -6,7 +6,7 @@ const {
   ARG_IS_NOT_STRING,
   UNEXPECTED_QUESTION_MARK,
   UNEXPECTED_SHARP,
-  UNENCODED_PARAM,
+  UNEXPECTED_EQUAL,
 } = UnifyUrlError.REASON_
 
 describe('unifyUrl(url)', () => {
@@ -55,9 +55,15 @@ describe('unifyUrl(url)', () => {
       }
     })
   })
+  
+  it('Should throw an error if any param contains more than one character "="', () => {
+    const url = 'http://some?p=p=c&pf=y'
+    const message = UNEXPECTED_EQUAL + url
+    assert.throws(() => unifyUrl(url), UnifyUrlError, message)
+  })
 
   // TODO: Replace this check with error of incorrect count of the "=" caharacters in any param.
-  it('Should throw an error if any query param is not uri encoded.', () => {
+  it('Should not throw an error if any query param is not uri encoded.', () => {
     const urlList = [
       'http://some.dom/pa/th?pa=\√&ra',
       'http://some.dom/pa/thpa?amпр=pam',
@@ -65,13 +71,7 @@ describe('unifyUrl(url)', () => {
     ]
         
     urlList.forEach((url) => {
-      assert.throws(() => unifyUrl(url))
-      try {
-        unifyUrl(url)
-      } catch (error) {
-        assert.instanceOf(error, UnifyUrlError)
-        assert.strictEqual(error.message, UNENCODED_PARAM + url)
-      }
+      assert.doesNotThrow(() => unifyUrl(url))
     })
   })
 

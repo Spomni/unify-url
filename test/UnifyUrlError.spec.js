@@ -24,7 +24,7 @@ describe('UnifyUrlError', () => {
     })
 
     it('Should has property UNENCODED_PARAM', () => {
-      assert(REASON_.hasOwnProperty('UNENCODED_PARAM'))    
+      assert(REASON_.hasOwnProperty('UNEXPECTED_EQUAL'))    
     })
   })
 
