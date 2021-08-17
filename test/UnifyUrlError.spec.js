@@ -29,10 +29,18 @@ describe('UnifyUrlError', () => {
   })
 
   describe('constructor()', () => {
-    it('Should return an instance of UnifyUrlError')
-    it('Should return an instance of Error')
+
+    it('Should return an instance of UnifyUrlError', () => {
+      const error = new UnifyUrlError()
+      assert.instanceOf(error, UnifyUrlError)
+    })
+
+    it('Should return an instance of Error', () => {
+      const error = new UnifyUrlError()
+      assert.instanceOf(error, Error)
+    })
   })
-  
+
   describe('#message', () => {
     it('Should be equal to the constructor param "message" if the "url" option is not passed.')
     it('Should append the "url" option value to the message if it is passed.')
