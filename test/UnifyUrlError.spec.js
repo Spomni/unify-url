@@ -42,7 +42,23 @@ describe('UnifyUrlError', () => {
   })
 
   describe('#message', () => {
-    it('Should be equal to the constructor param "message" if the "url" option is not passed.')
-    it('Should append the "url" option value to the message if it is passed.')
+  
+    it('Should be empty string if the constructor param "reason" is not passed.', () => {
+      const error = new UnifyUrlError()
+      assert(error.message === '')
+    })
+    
+    it('Should be equal to the constructor param "reason" if the "url" option is not passed.', () => {
+      const string = 'some string '
+      const error = new UnifyUrlError(string)
+      assert(error.message === string)
+    })
+
+    it('Should append the "url" option value to the message if it is passed.', () => {
+      const string = 'some string '
+      const url = 'some/url'
+      const error = new UnifyUrlError(string, url)
+      assert(error.message === string + url)
+    })
   })
 })
