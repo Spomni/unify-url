@@ -7,12 +7,21 @@ const {
   UNEXPECTED_EQUAL,
 } = UnifyUrlError.REASON_
 
+/**
+ * Remove query params without values from the passed url and sort others.
+ *
+ * @param {string} url
+ *
+ * @returns {string}
+ *
+ * @throws {UnifyUrlError}
+ */
 function unifyUrl(url) {
 
   if (typeof url !== 'string') {
     throw new UnifyUrlError(ARG_IS_NOT_STRING)
   }
-  
+
   const [tillPath, search, questMarkError] = url.split('?')
 
   if (questMarkError !== undefined) {
