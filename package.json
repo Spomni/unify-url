@@ -1,6 +1,6 @@
 {
   "name": "@spomni/unify-url",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Remove empty query params and sort the rest of them.",
   "keywords": [
     "url",
@@ -10,7 +10,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha test/*.spec.js",
-    "prepare": "npm test"
+    "prepublishOnly": "npm test"
   },
   "author": "spomni",
   "license": "UNLICENSED",
