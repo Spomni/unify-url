@@ -1,6 +1,6 @@
 {
   "name": "@spomni/unify-url",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Remove empty query params and sort the rest of them.",
   "keywords": [
     "url",
